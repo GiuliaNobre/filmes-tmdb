@@ -38,6 +38,9 @@ onMounted(async () => {
       <p class="movie-title">{{ movie.title }}</p>
       <p class="movie-release-date">{{ movie.release_date }}</p>
       <p class="movie-genres">{{ movie.genre_ids }}</p>
+      <p class="movie-name">{{ movie.name }}</p>
+        <p class="tv-name">{{ movie.original_name }}</p>
+        <p class="tv-name">{{ movie.first_air_date}}</p>
     </div>
     
   </div>
