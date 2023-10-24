@@ -85,7 +85,7 @@ const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 }
 
 .movie-genres span {
-  background-color: #748708;
+  background-color: #5e1d0f;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   color: #fff;
@@ -95,8 +95,8 @@ const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 
 .movie-genres span:hover {
   cursor: pointer;
-  background-color: #455a08;
-  box-shadow: 0 0 0.5rem #748708;
+  background-color: #5e1d0f;
+  box-shadow: 0 0 0.5rem #a17c74;
 }
 
 h1 {
@@ -134,6 +134,7 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: center;
 }
 
 .movie-card {
@@ -141,14 +142,14 @@ h1 {
   height: 30rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 0 0.5rem #000;
+  box-shadow: 0 0 0.5rem #bba1a1;
 }
 
 .movie-card img {
   width: 100%;
   height: 20rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem #000;
+  box-shadow: 0 0 0.5rem #b6a0a0;
 }
 
 .movie-details {

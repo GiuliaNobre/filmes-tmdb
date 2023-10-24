@@ -45,7 +45,6 @@ onMounted(async () => {
       <img :src="`https://image.tmdb.org/t/p/w500${tv.poster_path}`" :alt="tv.title" />
       <div class="tv-details">
         <p class="tv-name">{{ tv.name }}</p>
-        <p class="tv-name">{{ tv.original_name }}</p>
         <p class="tv-name">{{ tv.first_air_date }}</p>
       </div>
       <p class="tv-release-date">{{ formatDate(tv.first_air_date) }}</p>
@@ -71,7 +70,7 @@ onMounted(async () => {
 }
 
 .tv-genres span {
-  background-color: #748708;
+  background-color: #8C331F;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   color: #fff;
@@ -81,8 +80,8 @@ onMounted(async () => {
 
 .tv-genres span:hover {
   cursor: pointer;
-  background-color: #455a08;
-  box-shadow: 0 0 0.5rem #748708;
+  background-color: #8C331F;
+  box-shadow: 0 0 0.5rem #a16e62;
 }
 
 h1 {
@@ -121,6 +120,8 @@ h1 {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+  justify-content: center;
+  margin-bottom: 60px;
 }
 
 .tv-card {
@@ -128,14 +129,14 @@ h1 {
   height: 30rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 0 0.5rem #000;
+  box-shadow: 0 0 0.5rem #a39595;
 }
 
 .tv-card img {
   width: 100%;
   height: 20rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem #000;
+  box-shadow: 0 0 0.5rem #ada6a6;
 }
 
 .tv-details {
