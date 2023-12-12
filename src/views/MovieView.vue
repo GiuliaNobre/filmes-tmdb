@@ -4,22 +4,20 @@ import { ref, onMounted } from 'vue'
 import api from '@/plugins/axios'
 import Loading from 'vue-loading-overlay'
 import genreStore from '@/stores/genre'
+import useGenreStore from '@/stores/genre'
 
-const isLoading = ref(false);
+const genreStore = useGenreStore()
 
-const movies = ref([]);
+const isLoading = ref(false)
 
-const listMovies = async (genreId) => {
-  isLoading.value = true;
-  const response = await api.get('discover/movie', {
-    params: {
-      with_genres: genreId,
-      language: 'pt-BR'
-    }
-  });
-  movies.value = response.data.results
-  isLoading.value = false;
-};
+const movies = ref([])
+
+function getGenreName(id) {
+  const genero = genres.value.find((genre) => genre.id === id)
+  return genero.name
+}
+
+const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 
 const genres = ref([])
 
@@ -33,19 +31,17 @@ onMounted(async () => {
   await genreStore.getAllGenres('movie')
   isLoading.value = false
 })
-
-function getGenreName(id) {
-  const genero = genres.value.find((genre) => genre.id === id);
-  return genero.name;
-}
-
-const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 </script>
 
 <template>
   <h1>Filmes</h1>
   <ul class="genre-list">
-    <li v-for="genre in genreStore.genres" :key="genre.id" @click="listMovies(genre.id)" class="genre-item">
+    <li
+      v-for="genre in genreStore.genres"
+      :key="genre.id"
+      @click="listMovies(genre.id)"
+      class="genre-item"
+    >
       {{ genre.name }}
     </li>
   </ul>
@@ -53,7 +49,6 @@ const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 
   <div class="movie-list">
     <div v-for="movie in movies" :key="movie.id" class="movie-card">
-
       <img :src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`" :alt="movie.title" />
 
       <div class="movie-details">
@@ -68,11 +63,9 @@ const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
         <p class="tv-name">{{ movie.original_name }}</p>
         <p class="tv-name">{{ movie.first_air_date }}</p>
       </div>
-
     </div>
   </div>
 </template>
-
 
 <style scoped>
 .movie-genres {
@@ -85,7 +78,7 @@ const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 }
 
 .movie-genres span {
-  background-color: #5e1d0f;
+  background-color: #748708;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   color: #fff;
@@ -95,8 +88,8 @@ const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
 
 .movie-genres span:hover {
   cursor: pointer;
-  background-color: #5e1d0f;
-  box-shadow: 0 0 0.5rem #a17c74;
+  background-color: #455a08;
+  box-shadow: 0 0 0.5rem #748708;
 }
 
 h1 {
@@ -115,9 +108,8 @@ h1 {
   margin: 80px;
 }
 
-
 .genre-item {
-  background-color: #8C331F;
+  background-color: #8c331f;
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   color: #fff;
@@ -126,8 +118,6 @@ h1 {
 .genre-item:hover {
   cursor: pointer;
   background-color: #6b2211;
-
-
 }
 
 .movie-list {
