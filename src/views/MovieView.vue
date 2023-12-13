@@ -3,14 +3,11 @@ import { ref, onMounted } from 'vue'
 
 import api from '@/plugins/axios'
 import Loading from 'vue-loading-overlay'
-import genreStore from '@/stores/genre'
 import useGenreStore from '@/stores/genre'
 
 const genreStore = useGenreStore()
 
 const isLoading = ref(false)
-
-const movies = ref([])
 
 function getGenreName(id) {
   const genero = genres.value.find((genre) => genre.id === id)
@@ -31,6 +28,18 @@ onMounted(async () => {
   await genreStore.getAllGenres('movie')
   isLoading.value = false
 })
+
+const movies = ref([]);
+
+const listMovies = async (genreId) => {
+    const response = await api.get('discover/movie', {
+        params: {
+            with_genres: genreId,
+            language: 'pt-BR'
+        }
+    });
+    movies.value = response.data.results
+};
 </script>
 
 <template>

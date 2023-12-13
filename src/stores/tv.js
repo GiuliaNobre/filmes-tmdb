@@ -5,7 +5,6 @@ import api from '@/plugins/axios';
 export const useGenreStore = defineStore('genre', () => {
   const state = reactive({
     genres: [],
-    currentGenreId: null,
   });
 
   const genres = computed(() => state.genres);

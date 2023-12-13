@@ -1,63 +1,80 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+
 import api from '@/plugins/axios'
-import genreStore from '@/stores/genre'
+import Loading from 'vue-loading-overlay'
+import useGenreStore from '@/stores/genre'
 
-const tv = ref([]);
+const genreStore = useGenreStore()
+
+const isLoading = ref(false)
+
+function getGenreName(id) {
+  const genero = genres.value.find((genre) => genre.id === id)
+  return genero.name
+}
+
 const formatDate = (date) => new Date(date).toLocaleDateString('pt-BR')
-
-const listTv = async (genreId) => {
-  const response = await api.get('discover/tv', {
-    params: {
-      with_genres: genreId,
-      language: 'pt-BR'
-    }
-  });
-  tv.value = response.data.results
-};
 
 const genres = ref([])
 
 onMounted(async () => {
-  genreStore.getAllGenres('tv')
-  // const response = await api.get('genre/tv/list?language=pt-BR')
-  // genres.value = response.data.genres
+  const response = await api.get('genre/tv/list?language=pt-BR')
+  genres.value = response.data.genres
 })
 
-// function getGenreName(id) {
-//   const genero = genres.value.find((genre) => genre.id === id);
-//   return genero.name;
-// }
+onMounted(async () => {
+  isLoading.value = true
+  await genreStore.getAllGenres('tv')
+  isLoading.value = false
+})
+
+const tvs = ref([]);
+
+const listMovies = async (genreId) => {
+    const response = await api.get('discover/tv', {
+        params: {
+            with_genres: genreId,
+            language: 'pt-BR'
+        }
+    });
+    tvs.value = response.data.results
+};
 </script>
 
-
 <template>
-  <h1>Programa de Tv</h1>
+  <h1>Programas de Tv</h1>
   <ul class="genre-list">
-    <li v-for="genre in genreStore.genres" :key="genre.id" @click="listTv(genre.id)" class="genre-item">
+    <li
+      v-for="genre in genreStore.genres"
+      :key="genre.id"
+      @click="listMovies(genre.id)"
+      class="genre-item"
+    >
       {{ genre.name }}
     </li>
   </ul>
+  <loading v-model:active="isLoading" is-full-page />
 
   <div class="tv-list">
-    <div v-for="tv in tv" :key="tv.id" class="tv-card">
-
+    <div v-for="tv in tvs" :key="tv.id" class="tv-card">
       <img :src="`https://image.tmdb.org/t/p/w500${tv.poster_path}`" :alt="tv.title" />
+
       <div class="tv-details">
-        <p class="tv-name">{{ tv.name }}</p>
+        <p class="tv-title">{{ tv.title }}</p>
+        <p class="tv-release-date">{{ formatDate(tv.release_date) }}</p>
+        <p class="tv-genres">
+          <span v-for="genre_id in tv.genre_ids" :key="genre_id" @click="listMovies(genre_id)">
+            {{ genreStore.getGenreName(genre_id) }}
+          </span>
+        </p>
+        <p class="movie-name">{{ tv.name }}</p>
+        <p class="tv-name">{{ tv.original_name }}</p>
         <p class="tv-name">{{ tv.first_air_date }}</p>
       </div>
-      <p class="tv-release-date">{{ formatDate(tv.first_air_date) }}</p>
-      <p class="tv-genres">
-        <span v-for="genre_id in tv.genre_ids" :key="genre_id" @click="listTv(genre_id)">
-          {{ genreStore.getGenreName(genre_id) }}
-        </span>
-      </p>
     </div>
   </div>
 </template>
-
-
 
 <style scoped>
 .tv-genres {
@@ -70,7 +87,7 @@ onMounted(async () => {
 }
 
 .tv-genres span {
-  background-color: #8C331F;
+  background-color: #748708;
   border-radius: 0.5rem;
   padding: 0.2rem 0.5rem;
   color: #fff;
@@ -80,30 +97,14 @@ onMounted(async () => {
 
 .tv-genres span:hover {
   cursor: pointer;
-  background-color: #8C331F;
-  box-shadow: 0 0 0.5rem #a16e62;
+  background-color: #455a08;
+  box-shadow: 0 0 0.5rem #748708;
 }
 
 h1 {
   text-align: center;
   margin: 70px;
   color: #5e1d0f;
-}
-
-
-
-.genre-item {
-  background-color: #8C331F;
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  color: #fff;
-}
-
-.genre-item:hover {
-  cursor: pointer;
-  background-color: #6b2211;
-
-
 }
 
 .genre-list {
@@ -116,12 +117,23 @@ h1 {
   margin: 80px;
 }
 
+.genre-item {
+  background-color: #8c331f;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: #fff;
+}
+
+.genre-item:hover {
+  cursor: pointer;
+  background-color: #6b2211;
+}
+
 .tv-list {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   justify-content: center;
-  margin-bottom: 60px;
 }
 
 .tv-card {
@@ -129,14 +141,14 @@ h1 {
   height: 30rem;
   border-radius: 0.5rem;
   overflow: hidden;
-  box-shadow: 0 0 0.5rem #a39595;
+  box-shadow: 0 0 0.5rem #bba1a1;
 }
 
 .tv-card img {
   width: 100%;
   height: 20rem;
   border-radius: 0.5rem;
-  box-shadow: 0 0 0.5rem #ada6a6;
+  box-shadow: 0 0 0.5rem #b6a0a0;
 }
 
 .tv-details {
@@ -150,4 +162,3 @@ h1 {
   height: 3.2rem;
 }
 </style>
- 
