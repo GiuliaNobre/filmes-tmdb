@@ -32,13 +32,16 @@ onMounted(async () => {
 const movies = ref([]);
 
 const listMovies = async (genreId) => {
-    const response = await api.get('discover/movie', {
-        params: {
-            with_genres: genreId,
-            language: 'pt-BR'
-        }
-    });
-    movies.value = response.data.results
+  genreStore.setCurrentGenreId(genreId);
+  isLoading.value = true;
+  const response = await api.get('discover/movie', {
+    params: {
+      with_genres: genreId,
+      language: 'pt-BR',
+    },
+  });
+  movies.value = response.data.results;
+  isLoading.value = false;
 };
 </script>
 
